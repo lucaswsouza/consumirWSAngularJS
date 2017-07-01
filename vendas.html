@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html ng-app="trabfinalApp"> 
+    <head>
+        <title> Trabalho Final DM104 </title>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+        <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+        <script src="node_modules/angular/angular.min.js"></script>
+        <script src="node_modules/angular-resource/angular-resource.min.js"></script>
+        <script type="text/javascript" src="js/scriptvenda.js"></script>        
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Trabalho Final DM104</a>
+                </div>
+                 <ul class="nav navbar-nav">
+                    <li><a href="index.html">Principal</a></li>
+                    <li><a href="cliente.html">Controle de Clientes</a></li>
+                    <li><a href="filmes.html">Controle de Filmes</a></li>
+                    <li class="active"><a href="vendas.html">Controle de Vendas</a></li>
+                    <li><a href="relatorio.html">Relatório</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container" ng-controller="vendaController" ng-init="getVendas()">
+            <form class="well form-horizontal" action=" " method="post"  id="">
+               
+                <fieldset>
+
+                    <!-- Form Name -->
+                    <legend>Cadastro de Vendas</legend>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Cód. do Cliente</label>  
+                        <div class="col-md-4 inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input name="first_name" placeholder="Insira o código do cliente" class="form-control" 
+                                    type="text" ng-model="venda.idCliente">
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Data da venda </label>  
+                        <div class="col-md-4 inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                <input name="first_name" placeholder="Data da Venda 0000-00-00" class="form-control" 
+                                    type="text" ng-model="venda.dataVenda">
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Total da Venda</label>  
+                        <div class="col-md-4 inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-credit-card"></i></span>
+                                <input name="first_name" placeholder="Insira o total da venda" class="form-control" 
+                                    type="text" ng-model="venda.total">
+                            </div>
+                        </div>
+                    </div>    
+                     <div class="form-group">
+                        <label class="col-md-4 control-label">Cód do Filme</label>  
+                        <div class="col-md-4 inputGroupContainer">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
+                                <input name="first_name" placeholder="Insira o filme" class="form-control" 
+                                    type="text" ng-model="venda.idFilme">
+                            </div>
+                        </div>
+                    </div> 
+
+                    <!-- Button -->
+                    <div class="form-group">                   
+                        <label class="col-md-4 control-label"></label>
+                        
+                            <button type="submit" class="btn btn-warning" ng-click="addVenda()" >
+                                Enviar cadastro da venda
+                                <span class="glyphicon glyphicon-send"></span>
+                            </button>
+                
+                            <button type="submit" class="btn btn-danger" ng-click="limpaVenda()" >
+                                Limpa campos / Cancela Edição
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                                            
+                    </div>
+                </fieldset>
+            </form>
+       
+            <div class="well form-horizontal" >
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Código do Cliente</th>
+                            <th>Data da Venda</th>
+                            <th>Total da Venda</th>
+                            <th>Código do Filme</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="venda in vendas">
+
+                            <th scope="row">  {{ venda.idVendas }}</th>
+
+                            <th>  {{ venda.idCliente }}</th>
+
+                            <td> {{ venda.dataVenda  }} </td>
+
+                            <td> {{ venda.total  }} </td>
+
+                            <td> {{ venda.idFilme  }} </td>
+                            
+                            <td> 
+                                <button type="submit" class="btn btn-info" ng-click="editaVenda(venda)" >
+                                    Editar  
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                        
+                                <button type="submit" class="btn btn-danger" ng-click="deleteVenda(venda.idVendas)" >
+                                    Excluir 
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </td>
+
+                        </tr>
+                        
+                    </tbody>
+                </table>
+
+            <div>
+        </div>
+    
+    </body>
+
+</html>

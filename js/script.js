@@ -1,122 +1,182 @@
- $(document).ready(function() {
-    $('#contact_form').bootstrapValidator({
-        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            first_name: {
-                validators: {
-                        stringLength: {
-                        min: 2,
-                    },
-                        notEmpty: {
-                        message: 'Please supply your first name'
-                    }
-                }
-            },
-             last_name: {
-                validators: {
-                     stringLength: {
-                        min: 2,
-                    },
-                    notEmpty: {
-                        message: 'Please supply your last name'
-                    }
-                }
-            },
-            email: {
-                validators: {
-                    notEmpty: {
-                        message: 'Please supply your email address'
-                    },
-                    emailAddress: {
-                        message: 'Please supply a valid email address'
-                    }
-                }
-            },
-            phone: {
-                validators: {
-                    notEmpty: {
-                        message: 'Please supply your phone number'
-                    },
-                    phone: {
-                        country: 'US',
-                        message: 'Please supply a vaild phone number with area code'
-                    }
-                }
-            },
-            address: {
-                validators: {
-                     stringLength: {
-                        min: 8,
-                    },
-                    notEmpty: {
-                        message: 'Please supply your street address'
-                    }
-                }
-            },
-            city: {
-                validators: {
-                     stringLength: {
-                        min: 4,
-                    },
-                    notEmpty: {
-                        message: 'Please supply your city'
-                    }
-                }
-            },
-            state: {
-                validators: {
-                    notEmpty: {
-                        message: 'Please select your state'
-                    }
-                }
-            },
-            zip: {
-                validators: {
-                    notEmpty: {
-                        message: 'Please supply your zip code'
-                    },
-                    zipCode: {
-                        country: 'US',
-                        message: 'Please supply a vaild zip code'
-                    }
-                }
-            },
-            comment: {
-                validators: {
-                      stringLength: {
-                        min: 10,
-                        max: 200,
-                        message:'Please enter at least 10 characters and no more than 200'
-                        },
-                        notEmpty: {
-                            message: 'Please supply a description of your project'
-                        }
-                    }
+(function () {
+
+    angular
+        .module('trabfinalApp', ['ngResource'])
+        .controller('filmeController', FilmeController)
+        .service('FilmeService', FilmeService);
+
+
+    // URL Locais    
+    urlFilme     = "http://localhost:8089/filme";
+
+    FilmeController.$inject = ['$scope', '$http', 'FilmeService'];
+    function FilmeController($scope, $http, FilmeService) {
+
+        $scope.getFilmes = function(){
+            $http.get(urlFilme).then(function(response) {       
+                console.log("get filmes controller " );
+                console.log(response.data);
+                $scope.filmes = response.data;                               
+                console.log(response.data);
+            });
+        }        
+        
+        $scope.filme = {
+            idFilmes : '',
+            titulo   : '',  
+            prvenda  : '',
+            estoque  : ''
+        };
+        console.log($scope.filme);
+
+
+        $scope.limpa = function(){
+            $scope.filme = {
+                idFilmes : '',
+                titulo   : '',  
+                prvenda  : '',
+                estoque  : ''
+            };
+        }
+
+        $scope.addFilme = function () {
+ 
+            var tempfilme = {
+                titulo:  $scope.filme.titulo,
+                prvenda: $scope.filme.prvenda,
+                estoque: $scope.filme.estoque
+            };
+            
+            console.log(tempfilme);
+
+            var config = {
+                headers : {
+                    'Content-Type': 'application/json',
+                    'Method': 'POST',
+                    transformRequest: { titulo: tempfilme.titulo, prvenda: tempfilme.prvenda , estoque: tempfilme.estoque }
                 }
             }
-        })
-        .on('success.form.bv', function(e) {
-            $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
-                $('#contact_form').data('bootstrapValidator').resetForm();
+            
+            console.log(tempfilme);
+            
+            $http.defaults.headers.post["Content-Type"] = "application/json";
+            
+            $http.post(urlFilme, 
+                { titulo: tempfilme.titulo, prvenda: tempfilme.prvenda , estoque: tempfilme.estoque })
+            .then(
+                function(response){
+                    console.log(response.data);
+                }, 
+                function(response){
+                    console.log(response.data);
+                });
 
-            // Prevent form submission
-            e.preventDefault();
+            $http.get(urlFilme).then(function(response) {       
+                $scope.filmes = response.data;               
+            });
+            $scope.filmes = {
+                idFilmes : '',
+                titulo   : '',
+                prvenda  : '',
+                estoque  : ''
+            };
+        };
 
-            // Get the form instance
-            var $form = $(e.target);
+        $scope.deleteFilme = function(id){
 
-            // Get the BootstrapValidator instance
-            var bv = $form.data('bootstrapValidator');
+            $http.delete(urlFilme+"/"+id).then(function(response) {       
+                console.log(response);  
+                
+                $scope.filmes = {
+                    idFilmes : '',
+                    titulo   : '',
+                    prvenda  : '',
+                    estoque  : ''
+                };
 
-            // Use Ajax to submit form data
-            $.post($form.attr('action'), $form.serialize(), function(result) {
-                console.log(result);
-            }, 'json');
+                $http.get(urlFilme).then(function(response) {       
+                    $scope.filmes = response.data;               
+                });              
+            });                 
+            
+        }
+
+        $scope.editaFilme = function(filme){
+            console.log(filme);
+                
+            // exclui filme da lista
+            $http.delete(urlFilme+"/"+filme.idFilmes).then(function(response) {       
+                console.log(response);  
+                
+                $scope.filmes = {
+                    idFilmes : '',
+                    titulo   : '',
+                    prvenda  : '',
+                    estoque  : ''
+                };
+
+                // atualiza lista
+                $http.get(urlFilme).then(function(response) {       
+                    $scope.filmes = response.data;               
+                });              
+            });      
+
+            // joga os dados do filme para insercao
+            $scope.filme = filme;
+        }
+
+
+    }
+
+    
+    function FilmeService($http){
+        
+        var s = this;
+
+        var filmes = $http.get(urlFilme)
+            .then(function(response) {     
+                console.log("get filmes service");
+                console.log(response.data);  
+                filmes = response.data; 
+                return filmes;
         });
-});
 
+        s.getFilmes = function($http, $scope){        
+            console.log(filmes);    
+            return filmes;
+        }
+
+        s.addFilme = function(titulo, prvenda, estoque){            
+            var tempFilmes = {
+                titulo : titulo,
+                prvenda: prvenda,
+                estoque: estoque
+            };
+            var data = $.param({
+                'titulo'  : titulo,
+                'prvenda' : prvenda,
+                'estoque' : estoque
+            });
+            filmes.push(tempFilme);            
+            console.log(data);            
+            $http.post(urlFilme, data, config)
+                .then(
+                    function(response){
+                        console.log(response.data);
+                    }, 
+                    function(response){
+                        console.log(response.data);
+                    }
+                );
+        }
+       
+        s.deleteFilme = function($http, $scope, index){
+            console.log(index);
+            $http.delete(urlFilme+"/"+index).then(function($scope, response) {       
+                $scope.filmes = response.data;                
+            });
+        }       
+
+    }       
+
+})();
