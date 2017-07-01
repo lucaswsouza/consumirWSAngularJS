@@ -120,29 +120,63 @@
 
         $scope.editaVenda = function(venda){
             console.log(venda);
-                
-            // exclui venda da lista
-            $http.delete(urlVenda + "/" + venda.idVendas).then(function(response) {       
-                console.log(response);  
-                
-                //  $scope.venda = {
-                //     idVendas  : '',
-                //     dataVenda : '',  
-                //     idCliente : '',
-                //     total     : '',
-                //     idFilme   : ''
-                // };
-
-                // atualiza lista
-                $http.get(urlVenda).then(function(response) {       
-                    $scope.vendas = response.data;               
-                });              
-            });      
-
             $scope.venda = venda;
         }
 
+        
+        $scope.salvaEditVenda = function(){
+           
+            var tempvenda = {
+                idVendas  : $scope.venda.idVendas,
+                dataVenda : $scope.venda.dataVenda,
+                idCliente : $scope.venda.idCliente,
+                total     : $scope.venda.total,
+                idFilme   : $scope.venda.idFilme
+            };            
+            
+            console.log(tempvenda);
 
+            var config = {
+                headers : {
+                    'Content-Type': 'application/json',
+                    'Method': 'PUT',
+                    transformRequest: {  
+                        idVendas  : tempvenda.idVendas,
+                        dataVenda : tempvenda.dataVenda,
+                        idCliente : tempvenda.idCliente,
+                        total     : tempvenda.total,
+                        idFilme   : tempvenda.idFilme
+                    }
+                }
+            }
+            
+            console.log(tempvenda);
+            
+            $http.defaults.headers.post["Content-Type"] = "application/json";
+
+            $http.put(urlVenda , 
+                { idVendas  : tempvenda.idVendas,
+                  dataVenda : tempvenda.dataVenda,
+                  idCliente : tempvenda.idCliente,
+                  total     : tempvenda.total,
+                  idFilme   : tempvenda.idFilme
+                })
+            .then(function(response) {       
+                console.log(response);  
+                
+                $scope.venda = {
+                        idVendas   : '',
+                        dataVenda : '',  
+                        idCliente : '',
+                        total     : '',
+                        idFilme   : ''
+                    };
+
+                $http.get(urlVenda).then(function(response) {       
+                     $scope.vendas = response.data;               
+                });             
+            }); 
+        }
     }
 
     

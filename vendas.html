@@ -8,9 +8,13 @@
         <script src="node_modules/angular/angular.min.js"></script>
         <script src="node_modules/angular-resource/angular-resource.min.js"></script>
         <script type="text/javascript" src="js/scriptvenda.js"></script>        
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     </head>
 
-    <body>
+    <body ng-controller="vendaController">
 
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -27,7 +31,7 @@
             </div>
         </nav>
 
-        <div class="container" ng-controller="vendaController" ng-init="getVendas()">
+        <div class="container" ng-init="getVendas()">
             <form class="well form-horizontal" action=" " method="post"  id="">
                
                 <fieldset>
@@ -87,7 +91,7 @@
                             </button>
                 
                             <button type="submit" class="btn btn-danger" ng-click="limpaVenda()" >
-                                Limpa campos / Cancela Edição
+                                Limpa campos 
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                                             
@@ -115,15 +119,15 @@
 
                             <th>  {{ venda.idCliente }}</th>
 
-                            <td> {{ venda.dataVenda  }} </td>
+                            <td> {{ venda.dataVenda | date: 'dd/MM/yyyy'  }} </td>
 
-                            <td> {{ venda.total  }} </td>
+                            <td> {{ venda.total | currency:'R$ ' }} </td>
 
                             <td> {{ venda.idFilme  }} </td>
                             
                             <td> 
-                                <button type="submit" class="btn btn-info" ng-click="editaVenda(venda)" >
-                                    Editar  
+                                <button type="button" class="btn btn-info " data-toggle="modal" 
+                                    data-target="#myModal" ng-click="editaVenda(venda)">Editar
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
                         
@@ -139,6 +143,49 @@
                 </table>
 
             <div>
+        </div>
+
+
+        
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog" >
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Atualização de Venda</h4>
+                    </div>
+                    <div class="modal-body">
+                        Código do cliente
+                        <input name="first_name" placeholder="Insira o código do cliente" class="form-control" 
+                                    type="text" ng-model="venda.idCliente">
+
+                        Data da Venda            
+                        <input name="first_name" placeholder="Data da Venda 0000-00-00" class="form-control" 
+                                    type="text" ng-model="venda.dataVenda">
+
+                        Total da Venda
+                        <input name="first_name" placeholder="Insira o total da venda" class="form-control" 
+                                    type="text" ng-model="venda.total">  
+
+                        Código do Filme
+                        <input name="first_name" placeholder="Insira o total da venda" class="form-control" 
+                                    type="text" ng-model="venda.idFilme">                      
+
+                        <button type="submit" class="btn btn-warning" data-dismiss="modal" 
+                                ng-click="salvaEditVenda()" >
+                            Atualizar Venda
+                            <span class="glyphicon glyphicon-send"></span>
+                        </button>
+                                
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" 
+                            data-dismiss="modal" ng-click="getVendas()">Cancela</button>
+                </div>
+            </div>
         </div>
     
     </body>

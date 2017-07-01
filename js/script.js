@@ -103,26 +103,50 @@
 
         $scope.editaFilme = function(filme){
             console.log(filme);
-                
-            // exclui filme da lista
-            $http.delete(urlFilme+"/"+filme.idFilmes).then(function(response) {       
+            $scope.filme = filme;
+        }
+
+        
+        $scope.salvaEditFilme = function(){
+
+            var tempfilme = {
+                idFilmes : $scope.filme.idFilmes,
+                titulo   :  $scope.filme.titulo,
+                prvenda  : $scope.filme.prvenda,
+                estoque  : $scope.filme.estoque
+            };
+            
+            console.log(tempfilme);
+
+            var config = {
+                headers : {
+                    'Content-Type': 'application/json',
+                    'Method': 'PUT',
+                    transformRequest: { idFilmes : tempfilme.idFilmes,  titulo: tempfilme.titulo, prvenda: tempfilme.prvenda , estoque: tempfilme.estoque }
+                }
+            }
+            
+            console.log(tempfilme);
+            
+            $http.defaults.headers.post["Content-Type"] = "application/json";
+            
+            $http.put(urlFilme, 
+                { idFilmes : tempfilme.idFilmes, titulo: tempfilme.titulo, prvenda: tempfilme.prvenda , estoque: tempfilme.estoque })
+            .then(function(response) {       
                 console.log(response);  
                 
-                $scope.filmes = {
+                $scope.filme = {
                     idFilmes : '',
                     titulo   : '',
                     prvenda  : '',
                     estoque  : ''
                 };
 
-                // atualiza lista
                 $http.get(urlFilme).then(function(response) {       
                     $scope.filmes = response.data;               
-                });              
-            });      
-
-            // joga os dados do filme para insercao
-            $scope.filme = filme;
+                });
+                
+            }); 
         }
 
 

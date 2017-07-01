@@ -8,9 +8,13 @@
         <script src="node_modules/angular/angular.min.js"></script>
         <script src="node_modules/angular-resource/angular-resource.min.js"></script>
         <script type="text/javascript" src="js/script.js"></script>        
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     </head>
 
-    <body>
+    <body ng-controller="filmeController" >
 
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -27,7 +31,7 @@
             </div>
         </nav>
 
-        <div class="container" ng-controller="filmeController" ng-init="getFilmes()">
+        <div class="container" ng-init="getFilmes()">
             <form class="well form-horizontal" action=" " method="post"  id="">
                
                 <fieldset>
@@ -79,7 +83,7 @@
                             </button>
                 
                             <button type="submit" class="btn btn-danger" ng-click="limpa()" >
-                                Limpa campos / Cancela Edição
+                                Limpa campos 
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                                             
@@ -107,8 +111,8 @@
                             <td> {{ filme.estoque }}</td>
                             
                             <td> 
-                                <button type="submit" class="btn btn-info" ng-click="editaFilme(filme)" >
-                                    Editar  
+                                 <button type="button" class="btn btn-info " data-toggle="modal" 
+                                    data-target="#myModal" ng-click="editaFilme(filme)">Editar
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
                         
@@ -126,6 +130,45 @@
             <div>
         </div>
     
+
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog" >
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Atualização de filme</h4>
+                    </div>
+                    <div class="modal-body">
+                        Titulo
+                        <input name="first_name" placeholder="Insira o nome do filme" class="form-control" 
+                                    type="text" ng-model="filme.titulo">
+
+                        Preço de Venda
+                        <input name="first_name" placeholder="Preço de venda do filme" class="form-control" 
+                                    type="text" ng-model="filme.prvenda">
+
+                        Estoque
+                        <input name="first_name" placeholder="Estoque do filme" class="form-control" 
+                                    type="text" ng-model="filme.estoque">            
+
+
+                        <button type="submit" class="btn btn-warning" data-dismiss="modal" 
+                                ng-click="salvaEditFilme()" >
+                            Atualizar Filmes
+                            <span class="glyphicon glyphicon-send"></span>
+                        </button>
+                                
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" 
+                            data-dismiss="modal" ng-click="getFilmes()">Cancela</button>
+                </div>
+            </div>
+        </div>
+
     </body>
 
 </html>

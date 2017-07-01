@@ -93,12 +93,33 @@
 
         $scope.editaCliente = function(cliente){
             console.log(cliente);
-                
+            $scope.cliente = cliente;
+        }
+
+        $scope.salvaEditCliente = function(){
+
+            var tempcliente = {
+                nome      : $scope.cliente.Nome ,
+                idCliente : $scope.cliente.idCliente
+            };
             
-            $http.delete(urlCliente+"/"+cliente.idCliente).then(function(response) {       
+            
+            $http.defaults.headers.post["Content-Type"] = "application/json";
+            
+            var config = {
+                headers : {
+                    'Content-Type': 'application/json',
+                    'Method': 'PUT',
+                    transformRequest: { idCliente : tempcliente.idCliente, nome: tempcliente.nome }
+                }
+            }
+
+            console.log(tempcliente);
+
+            $http.put(urlCliente , { idCliente : tempcliente.idCliente, nome: tempcliente.nome }).then(function(response) {       
                 console.log(response);  
                 
-                $scope.clientes = {
+                $scope.cliente = {
                     idCliente : '',
                     nome   : ''
                 };
@@ -107,9 +128,7 @@
                 $http.get(urlCliente).then(function(response) {       
                     $scope.clientes = response.data;               
                 });              
-            });      
-
-            $scope.cliente = cliente;
+            }); 
         }
 
 

@@ -10,7 +10,7 @@
         <script src="node_modules/angular/angular.min.js"></script>
         <script src="node_modules/angular-resource/angular-resource.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script type="text/javascript" src="js/script.js"></script>        
+        <script type="text/javascript" src="js/scriptrelatorio.js"></script>        
     </head>
 
     <body>
@@ -30,42 +30,36 @@
             </div>
         </nav>
 
-         <div class="container" ng-controller="filmeController" ng-init="getFilmes()">
+         <div class="container" ng-controller="relatorioController" ng-init="getRelatorio()">
             <form class="well form-horizontal" action=" " method="post"  id="">
                
                 <fieldset>
 
                 <!-- Form Name -->
-                <legend>Projeto Final DM104</legend>
+                <legend>Relatório dos 5 Filmes mais vendidos</legend>
 
-                    <h4 class="sobre">
-                        Sistema consiste em uma revenda de filmes, deve cadastrar o filme , o cliente e logo após o venda.
-                        O Relatorio é dos 5 filmes mais vendidos.
-                    </h4>
-
-                    <h5 class="sobre">
-                        Instruções :
-                        <ul class="fa-ul">
-                            <li><i class="fa-li fa fa-square"></i>
-                                Script do banco , pasta BANCO DE DADOS</li>
-                            <li><i class="fa-li fa fa-square"></i>
-                                Os menus de controle acima, terá acesso as opções de edição, exclusão , adição e listagem os itens.
-                                </li>
-                            <li><i class="fa-li fa fa-square"></i>Menu de relatório para acesso aos 5 filmes mais vendidos</li>
-                        </ul>
-                    </h5>         
-               
-                    <h5>
-                        Desenvolvido por : </h5>
-                    <h5>                
-                        Lucas Willian
-                    </h5>
-                    <h5>
-                        Rafael Rodrigues
-                    </h5>
-
-                    idFilme":1,"count(*)
-
+                     <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código do Filme</th>
+                            <th>Titulo do Filme</th>
+                            <th>Total de filmes vendidos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="relatorio in relatorios">
+                            <td>
+                                {{ relatorio.id }} 
+                            </td>
+                            <td>
+                                {{ relatorio.titulo }}
+                            </td>    
+                            <td>    
+                                {{ relatorio.total }}
+                            </td>
+                        </tr>    
+                    </tbody>
+                </table>
 
                 </fieldset>
             </form>
